@@ -1,0 +1,29 @@
+{
+    "options": {
+        "cwd": "${workspaceFolder}/build"
+    },
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "cmake the project",
+            "command": "cmake",
+            "args": [
+                ".."
+            ]
+        },
+        {
+            "label": "make the project",
+            "command": "make",
+            "args": []
+        },
+        {
+            "label": "Build the project",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "cmake the project",
+                "make the project"
+            ]
+        }
+    ],
+    "version": "2.0.0"
+}

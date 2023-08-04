@@ -1,0 +1,19 @@
+logs:
+    - name: root
+      level: info
+      #remeber to add ""
+      formatter: "%d%T%m%n"  
+      appenders:
+          - type: FileLogAppender
+            file: root.txt
+          - type: StdoutLogAppender
+    - name: system
+      level: info
+      formatter: "%d%T[%p]%T%m%n"
+      appenders:
+          - type: FileLogAppender
+            file: system.txt
+          - type: StdoutLogAppender 
+system:
+    port: 9900
+    value: 15
