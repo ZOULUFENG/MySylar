@@ -2,8 +2,13 @@
 
 #include "../sylar/config.h"
 #include "../sylar/log.h"
+
 sylar::ConfigVar<int>::ptr g_int_value_config
     = sylar::Config::Lookup("system.port", (int)8080, "system port");
+
+// to see the fault by type
+sylar::ConfigVar<float>::ptr g_int_valuex_config
+    = sylar::Config::Lookup("system.port", (float)8080.0f, "system port");
 
 sylar::ConfigVar<float>::ptr g_float_value_config
     = sylar::Config::Lookup("system.value", (float)10.2f, "system value");
@@ -25,7 +30,7 @@ sylar::ConfigVar<std::map<std::string, int>>::ptr g_int_map_value_config
     = sylar::Config::Lookup("system.str_int_map", std::map<std::string, int> { { "k", 2 } }, "system str int map");
 
 sylar::ConfigVar<std::unordered_map<std::string, int>>::ptr g_int_umap_value_config
-    = sylar::Config::Lookup("system.str_int_umap", std::unordered_map<std::string, int> { { "k", 2 } }, "system str int umap");
+    = sylar::Config::Lookup("system.str_int_umap", std::unordered_map<std::string, int> { { "k", 20 } }, "system str int umap");
 
 void print_yaml(const YAML::Node& node, int level);
 

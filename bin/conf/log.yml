@@ -28,10 +28,10 @@ system:
       - 11
     int_uset: [ 12, 13, 14]
     str_int_map:
-      K: 30
+      k: 30
       k2: 20
       k3: 10
     str_int_umap:
-      K: 130
+      k: 130
       k2: 120
       k3: 110
