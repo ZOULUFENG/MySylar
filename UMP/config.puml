@@ -1,0 +1,60 @@
+@startuml Config
+
+class ConfigVarBase {
+    +getName(): std::string
+    +getDescription(): std::string
+    +toString(): std::string
+    +fromString(val: std::string): bool
+    +getTypeName(): std::string
+}
+
+class LexicalCast<F, T> {
+    +operator()(v: F): T
+}
+
+class LexicalCast<std::string, std::unordered_map<std::string, T>> {
+    +operator()(v: std::string): std::unordered_map<std::string, T>
+}
+
+class LexicalCast<std::string, std::map<std::string, T>> {
+    +operator()(v: std::string): std::map<std::string, T>
+}
+
+class LexicalCast<std::string, std::unordered_set<T>> {
+    +operator()(v: std::string): std::unordered_set<T>
+}
+
+class LexicalCast<std::string, std::set<T>> {
+    +operator()(v: std::string): std::set<T>
+}
+
+class LexicalCast<std::string, std::list<T>> {
+    +operator()(v: std::string): std::list<T>
+}
+
+class LexicalCast<std::string, std::vector<T>> {
+    +operator()(v: std::string): std::vector<T>
+}
+
+class ConfigVar<T> {
+    +toString(): std::string
+    +fromString(val: std::string): bool
+    +getValue(): T
+    +setValue(val: T): void
+    +getTypeName(): std::string
+}
+
+class Config {
+    +Lookup<T>(name: std::string, default_value: T, description: std::string): typename ConfigVar<T>::ptr
+    +Lookup<T>(name: std::string): typename ConfigVar<T>::ptr
+    +LoadFromYaml(root: YAML::Node): void
+    +LookupBase(name: std::string): ConfigVarBase::ptr
+}
+
+ConfigVarBase ..|> ConfigVar
+ConfigVar ..|> ConfigVarBase
+
+Config ..> ConfigVarBase : s_datas
+Config ..|> ConfigVar
+
+@enduml
