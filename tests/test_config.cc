@@ -3,6 +3,7 @@
 #include "../sylar/config.h"
 #include "../sylar/log.h"
 
+#if 0
 sylar::ConfigVar<int>::ptr g_int_value_config
     = sylar::Config::Lookup("system.port", (int)8080, "system port");
 
@@ -112,11 +113,90 @@ void print_yaml(const YAML::Node& node, int level)
     }
 }
 
+#endif
+class Person {
+public:
+    std::string m_name = "";
+    int m_age = 0;
+    bool m_sex = true;
+    std::string toString() const
+    {
+        std::stringstream ss;
+        ss << "[Person name=" << m_name
+           << " age=" << m_age
+           << " sex=" << m_sex
+           << "]";
+        return ss.str();
+    }
+};
+namespace sylar {
+// why1 and why 2
+template <>
+class LexicalCast<std::string, Person> {
+public:
+    Person operator()(const std::string& v)
+    {
+        YAML::Node node = YAML::Load(v);
+        Person p;
+        p.m_name = node["name"].as<std::string>();
+        p.m_age = node["age"].as<int>();
+        p.m_sex = node["sex"].as<bool>();
+        return p;
+    }
+};
+
+template <>
+class LexicalCast<Person, std::string> {
+public:
+    std::string operator()(const Person& p)
+    {
+        YAML::Node node;
+        node["name"] = p.m_name;
+        node["age"] = p.m_age;
+        node["sex"] = p.m_sex;
+        std::stringstream ss;
+        ss << node;
+        return ss.str();
+    }
+};
+}
+
+sylar::ConfigVar<Person>::ptr g_person
+    = sylar::Config::Lookup("class.person", Person(), "system person");
+
+sylar::ConfigVar<std::map<std::string, Person>>::ptr g_person_map
+    = sylar::Config::Lookup("class.map", std::map<std::string, Person>(), "system person");
+
+sylar::ConfigVar<std::map<std::string, std::vector<Person>>>::ptr g_person_vec_map
+    = sylar::Config::Lookup("class.vec_map", std::map<std::string, std::vector<Person>>(), "system person");
+
+void test_class()
+{
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " << g_person->getValue().toString() << " - " << g_person->toString();
+#define XX_PM(g_var, prefix)                                                                                \
+    {                                                                                                       \
+        auto m = g_var->getValue();                                                                         \
+        for (auto& i : m) {                                                                                 \
+            SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << #prefix << ": " << i.first << " - " << i.second.toString(); \
+        }                                                                                                   \
+        SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << #prefix << ": size=" << m.size();                               \
+    }
+
+    XX_PM(g_person_map, "class.map before");
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " << g_person_vec_map->toString();
+    YAML::Node root = YAML::LoadFile("/home/gl/workspace/sylar/bin/conf/log.yml");
+    sylar::Config::LoadFromYaml(root);
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
+    XX_PM(g_person_map, "class.map after");
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_person_vec_map->toString();
+}
+
 int main(int argc, char** argv)
 {
     // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << g_int_value_config->getValue();
     // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << g_float_value_config->toString();
     // test_yaml();
-    test_config();
+    // test_config();
+    test_class();
     return 0;
 }

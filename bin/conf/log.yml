@@ -35,3 +35,33 @@ system:
       k: 130
       k2: 120
       k3: 110
+class:
+    person:
+      name: Gl
+      age: 25
+      sex: true
+    map:
+      gl01:
+        name: Gl01
+        age: 26
+        sex: true
+      gl02:
+        name: Gl02
+        age: 24
+        sex: false
+    vec_map:
+      k1: 
+        - name: m1
+          age: 30
+          sex: true
+        - name: m2
+          age: 31
+          sex: false
+      k2:
+        - name: m11
+          age: 32 
+          sex: true
+        - name: m22
+          age: 33
+          sex: false
+         

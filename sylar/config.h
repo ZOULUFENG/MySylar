@@ -1,7 +1,9 @@
 #pragma once
 #include <yaml-cpp/yaml.h>
 
+#include "log.h"
 #include <boost/lexical_cast.hpp>
+#include <functional>
 #include <list>
 #include <map>
 #include <memory>
@@ -10,8 +12,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-
-#include "log.h"
 
 namespace sylar {
 class ConfigVarBase {
@@ -234,8 +234,7 @@ public:
 };
 
 // FromStr
-template <class T, class FromStr = LexicalCast<std::string, T>,
-    class ToStr = LexicalCast<T, std::string>>
+template <class T, class FromStr = LexicalCast<std::string, T>, class ToStr = LexicalCast<T, std::string>>
 class ConfigVar : public ConfigVarBase {
 public:
     typedef std::shared_ptr<ConfigVar> ptr;
@@ -264,7 +263,7 @@ public:
             setValue(FromStr()(val));
         } catch (std::exception& e) {
             SYLAR_LOG_ERROR(SYLAR_LOG_ROOT())
-                << "ConfigVar::fromString exception" << e.what()
+                << "ConfigVar::fromString exception " << e.what()
                 << " convert: string to " << typeid(m_val).name();
         }
         return false;
