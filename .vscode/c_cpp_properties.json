@@ -7,7 +7,8 @@
                 "${workspaceFolder}/sylar",
                 "${workspaceFolder}",
                 "${workspaceFolder}/sylar/**",
-                "/apps/sylar/include/"
+                "/apps/sylar/include/**",
+
             ],
             "defines": [],
             "cStandard": "c17",

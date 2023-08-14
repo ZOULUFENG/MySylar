@@ -1,0 +1,77 @@
+@startuml
+class Log {
+  - logLevel: LogLevel
+  - formatter: LogFormatter
+  - appenders: std::vector<LogAppender::ptr>
+  - mutex: MutexType
+  + log(level: LogLevel, event: LogEvent::ptr): void
+  + debug(event: LogEvent::ptr): void
+  + info(event: LogEvent::ptr): void
+  + warn(event: LogEvent::ptr): void
+  + error(event: LogEvent::ptr): void
+  + fatal(event: LogEvent::ptr): void
+  + addAppender(appender: LogAppender::ptr): void
+  + clearAppenders(): void
+  + setFormatter(formatter: LogFormatter::ptr): void
+  + setLogLevel(level: LogLevel): void
+}
+
+class LogEvent {
+  - loggerName: std::string
+  - threadId: uint64_t
+  - threadName: std::string
+  - fiberId: uint64_t
+  - timestamp: uint64_t
+  - file: const char*
+  - line: int
+  - function: const char*
+  - content: std::string
+  - lines: uint32_t
+  - m_ss: std::stringstream
+  + LogEvent(loggerName: std::string, level: LogLevel, file: const char*, line: int, function: const char*)
+  + getLoggerName(): const std::string&
+  + getThreadId(): uint64_t
+  + getThreadName(): const std::string&
+  + getFiberId(): uint64_t
+  + getTimestamp(): uint64_t
+  + getFile(): const char*
+  + getLine(): int
+  + getFunction(): const char*
+  + getContent(): const std::string&
+  + getLines(): uint32_t
+  + getSS(): std::stringstream&
+  + format(const char* fmt, ...): void
+}
+
+class LogFormatter {
+  + format(event: LogEvent::ptr): std::string
+}
+
+class LogAppender {
+  - level: LogLevel
+  - formatter: LogFormatter::ptr
+  + log(level: LogLevel, event: LogEvent::ptr): void
+  + setFormatter(formatter: LogFormatter::ptr): void
+  + setLevel(level: LogLevel): void
+  + getLevel(): LogLevel
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+  FATAL
+}
+
+Log --> LogLevel
+Log --> LogFormatter
+Log --> LogAppender
+
+LogEvent --> LogLevel
+LogEvent --> LogFormatter
+
+LogAppender --> LogLevel
+LogAppender --> LogFormatter
+
+@enduml

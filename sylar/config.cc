@@ -1,15 +1,14 @@
 #include "config.h"
+#include <iostream>
 namespace sylar {
-Config::ConfigVarMap Config::s_datas;
+// Config::ConfigVarMap Config::s_datas;
 //"A.B",10
 
-static void ListAllMember(
-    const std::string& prefix, const YAML::Node& node,
-    std::list<std::pair<std::string, const YAML::Node>>& output)
+static void ListAllMember(const std::string& prefix,
+    const YAML::Node& node, std::list<std::pair<std::string, const YAML::Node>>& output)
 {
     if (prefix.find_first_not_of("abcdefghijklmnopqrstuvwxyz._0123456789") != std::string::npos) {
-        SYLAR_LOG_ERROR(SYLAR_LOG_ROOT())
-            << "Lookup name invalid " << prefix << " : " << node;
+        SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name invalid " << prefix << " : " << node;
         return;
     }
     output.push_back(std::make_pair(prefix, node));
@@ -25,6 +24,9 @@ void Config::LoadFromYaml(const YAML::Node& root)
 {
     std::list<std::pair<std::string, const YAML::Node>> all_nodes;
     ListAllMember("", root, all_nodes);
+    // std::cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << std::endl;
+    // std::cout << "all_nodes.size(): " << all_nodes.size() << std::endl;
+    // std::cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << std::endl;
     for (auto& i : all_nodes) {
         std::string key = i.first;
         if (key.empty()) {
@@ -45,7 +47,7 @@ void Config::LoadFromYaml(const YAML::Node& root)
 }
 ConfigVarBase::ptr Config::LookupBase(const std::string& name)
 {
-    auto it = s_datas.find(name);
-    return it == s_datas.end() ? nullptr : it->second;
+    auto it = GetDatas().find(name);
+    return it == GetDatas().end() ? nullptr : it->second;
 }
 } // namespace sylar

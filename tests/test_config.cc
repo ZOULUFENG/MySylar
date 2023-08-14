@@ -1,7 +1,7 @@
-#include <yaml-cpp/yaml.h>
-
 #include "../sylar/config.h"
 #include "../sylar/log.h"
+#include <iostream>
+#include <yaml-cpp/yaml.h>
 
 #if 0
 sylar::ConfigVar<int>::ptr g_int_value_config
@@ -37,7 +37,7 @@ void print_yaml(const YAML::Node& node, int level);
 
 void test_yaml()
 {
-    YAML::Node root = YAML::LoadFile("/home/gl/workspace/sylar/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/gl/workspace/sylar/bin/conf/test.yml");
     print_yaml(root, 0);
     // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << root;
 }
@@ -128,6 +128,12 @@ public:
            << "]";
         return ss.str();
     }
+    bool operator==(const Person& oth) const
+    {
+        return m_name == oth.m_name
+            && m_age == oth.m_age
+            && m_sex == oth.m_sex;
+    }
 };
 namespace sylar {
 // why1 and why 2
@@ -182,13 +188,44 @@ void test_class()
         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << #prefix << ": size=" << m.size();                               \
     }
 
+    g_person->addListener(10, [](const Person& old_value, const Person& new_value) {
+        SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "old_value="
+                                         << old_value.toString() << " new_value=" << new_value.toString();
+    });
+
+    // g_person_map->addListener(20, [](const std::map<std::string, Person>& old_value, const std::map<std::string, Person>& new_value) {
+    //     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Person Map Changed:";
+    //     for (const auto& pair : new_value) {
+    //         const std::string& key = pair.first;
+    //         const Person& person = pair.second;
+    //         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Key: " << key << ", Person: " << person.toString();
+    //     }
+    // });
+
     XX_PM(g_person_map, "class.map before");
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " << g_person_vec_map->toString();
-    YAML::Node root = YAML::LoadFile("/home/gl/workspace/sylar/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/gl/workspace/sylar/bin/conf/test.yml");
     sylar::Config::LoadFromYaml(root);
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
     XX_PM(g_person_map, "class.map after");
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_person_vec_map->toString();
+}
+
+void test_log()
+{
+    static sylar::Logger::ptr system_logger = SYLAR_LOG_NAME("system");
+    SYLAR_LOG_INFO(system_logger) << "hello system" << std::endl;
+    std::cout << sylar::LoggerMgr::GetInstance()->toYamlString() << std::endl;
+    YAML::Node root = YAML::LoadFile("/home/gl/workspace/sylar/bin/conf/log.yml");
+    sylar::Config::LoadFromYaml(root);
+    std::cout << "=======================" << std::endl;
+    std::cout << sylar::LoggerMgr::GetInstance()->toYamlString() << std::endl;
+    std::cout << "=======================" << std::endl;
+    std::cout << root << std::endl;
+    SYLAR_LOG_INFO(system_logger) << "hello system" << std::endl;
+
+    system_logger->setFormatter("%d - %m%n");
+    SYLAR_LOG_INFO(system_logger) << "hello system" << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -197,6 +234,7 @@ int main(int argc, char** argv)
     // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << g_float_value_config->toString();
     // test_yaml();
     // test_config();
-    test_class();
+    // test_class();
+    test_log();
     return 0;
 }

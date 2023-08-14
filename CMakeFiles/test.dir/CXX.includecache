@@ -7,24 +7,42 @@
 #IncludeRegexTransform: 
 
 /home/gl/workspace/sylar/sylar/log.h
-string
+stdarg.h
 -
 stdint.h
 -
-memory
+fstream
 -
 list
 -
+map
+-
+memory
+-
 sstream
 -
-fstream
+string
 -
 vector
+-
+singleton.h
+/home/gl/workspace/sylar/sylar/singleton.h
+util.h
+/home/gl/workspace/sylar/sylar/util.h
+
+/home/gl/workspace/sylar/sylar/singleton.h
+
+/home/gl/workspace/sylar/sylar/util.h
+unistd.h
 -
 
 /home/gl/workspace/sylar/tests/test.cc
 iostream
 -
+thread
+-
 ../sylar/log.h
 /home/gl/workspace/sylar/sylar/log.h
+../sylar/util.h
+/home/gl/workspace/sylar/sylar/util.h
 
