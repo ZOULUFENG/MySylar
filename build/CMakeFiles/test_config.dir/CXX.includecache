@@ -359,6 +359,8 @@ yaml-cpp/yaml.h
 -
 log.h
 /home/gl/workspace/sylar/sylar/log.h
+thread.h
+/home/gl/workspace/sylar/sylar/thread.h
 boost/lexical_cast.hpp
 -
 functional
@@ -401,10 +403,28 @@ vector
 -
 singleton.h
 /home/gl/workspace/sylar/sylar/singleton.h
+thread.h
+/home/gl/workspace/sylar/sylar/thread.h
 util.h
 /home/gl/workspace/sylar/sylar/util.h
 
 /home/gl/workspace/sylar/sylar/singleton.h
+
+/home/gl/workspace/sylar/sylar/thread.h
+atomic
+-
+functional
+-
+memory
+-
+pthread.h
+-
+semaphore.h
+-
+stdint.h
+-
+thread
+-
 
 /home/gl/workspace/sylar/sylar/util.h
 unistd.h

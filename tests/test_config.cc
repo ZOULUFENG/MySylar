@@ -3,7 +3,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
-#if 0
+#if 1
 sylar::ConfigVar<int>::ptr g_int_value_config
     = sylar::Config::Lookup("system.port", (int)8080, "system port");
 
@@ -188,7 +188,7 @@ void test_class()
         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << #prefix << ": size=" << m.size();                               \
     }
 
-    g_person->addListener(10, [](const Person& old_value, const Person& new_value) {
+    g_person->addListener([](const Person& old_value, const Person& new_value) {
         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "old_value="
                                          << old_value.toString() << " new_value=" << new_value.toString();
     });
@@ -236,5 +236,11 @@ int main(int argc, char** argv)
     // test_config();
     // test_class();
     test_log();
+    sylar::Config::Visit([](const sylar::ConfigVarBase::ptr& var) {
+        SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "name=" << var->getName()
+                                         << " description=" << var->getDescription()
+                                         << " typename=" << var->getTypeName()
+                                         << " value=" << var->toString();
+    });
     return 0;
 }

@@ -354,11 +354,19 @@ yaml-cpp/node/parse.h
 yaml-cpp/node/emit.h
 /apps/sylar/include/yaml-cpp/yaml-cpp/node/emit.h
 
+/home/gl/workspace/sylar/sylar/config.cc
+config.h
+/home/gl/workspace/sylar/sylar/config.h
+iostream
+-
+
 /home/gl/workspace/sylar/sylar/config.h
 yaml-cpp/yaml.h
 -
 log.h
 /home/gl/workspace/sylar/sylar/log.h
+thread.h
+/home/gl/workspace/sylar/sylar/thread.h
 boost/lexical_cast.hpp
 -
 functional
@@ -378,6 +386,20 @@ unordered_map
 unordered_set
 -
 vector
+-
+
+/home/gl/workspace/sylar/sylar/log.cc
+log.h
+/home/gl/workspace/sylar/sylar/log.h
+time.h
+-
+config.h
+/home/gl/workspace/sylar/sylar/config.h
+functional
+-
+iostream
+-
+map
 -
 
 /home/gl/workspace/sylar/sylar/log.h
@@ -401,6 +423,8 @@ vector
 -
 singleton.h
 /home/gl/workspace/sylar/sylar/singleton.h
+thread.h
+/home/gl/workspace/sylar/sylar/thread.h
 util.h
 /home/gl/workspace/sylar/sylar/util.h
 
@@ -425,6 +449,8 @@ sylar.h
 /home/gl/workspace/sylar/sylar/sylar.h
 
 /home/gl/workspace/sylar/sylar/thread.h
+atomic
+-
 functional
 -
 memory
@@ -432,6 +458,8 @@ memory
 pthread.h
 -
 semaphore.h
+-
+stdint.h
 -
 thread
 -

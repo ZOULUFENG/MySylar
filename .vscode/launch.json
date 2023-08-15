@@ -8,7 +8,7 @@
             "name": "g++ build and debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/test_thread",
+            "program": "${workspaceFolder}/bin/test_config",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

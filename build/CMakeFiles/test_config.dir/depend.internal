@@ -36,5 +36,6 @@ CMakeFiles/test_config.dir/tests/test_config.cc.o
  /home/gl/workspace/sylar/sylar/config.h
  /home/gl/workspace/sylar/sylar/log.h
  /home/gl/workspace/sylar/sylar/singleton.h
+ /home/gl/workspace/sylar/sylar/thread.h
  /home/gl/workspace/sylar/sylar/util.h
  /home/gl/workspace/sylar/tests/test_config.cc
