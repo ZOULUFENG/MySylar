@@ -169,6 +169,17 @@ public:
         os << event->getFile();
     }
 };
+
+class ThreadNameFormatItem : public LogFormatter::FormatItem {
+public:
+    ThreadNameFormatItem(const std::string& str = "") { }
+    void format(std::ostream& os, Logger::ptr logger, LogLevel::Level level,
+        LogEvent::ptr event) override
+    {
+        os << event->getThreadName();
+    }
+};
+
 class LineFormatItem : public LogFormatter::FormatItem {
 public:
     LineFormatItem(const std::string& str = "") { }
@@ -215,7 +226,7 @@ private:
 Logger::Logger(const std::string& name)
     : m_name(name)
 {
-    m_formatter.reset(new LogFormatter("%d%T%t%T%F%T[%p]%T%c%T<%f:%l>%T%m%T%n"));
+    m_formatter.reset(new LogFormatter("%d%T%t%T%N%T%F%T[%p]%T\"%c\"%T<%f:%l>%T%m%T%n"));
 }
 void Logger::log(LogLevel::Level level, LogEvent::ptr event)
 {
@@ -234,7 +245,7 @@ void Logger::log(LogLevel::Level level, LogEvent::ptr event)
 
 LogEvent::LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level,
     const char* file, int32_t line, uint32_t elapse,
-    uint32_t thread_id, uint32_t fiber_id, uint64_t time)
+    uint32_t thread_id, uint32_t fiber_id, uint64_t time, const std::string& thread_name)
     : m_file(file)
     , m_line(line)
     , m_threadId(thread_id)
@@ -243,6 +254,7 @@ LogEvent::LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level,
     , m_time(time)
     , m_logger(logger)
     , m_level(level)
+    , m_threadName(thread_name)
 {
 }
 
@@ -468,6 +480,7 @@ void LogFormatter::init()
             XX(l, LineFormatItem),
             XX(T, TabFormatItem),
             XX(F, FiberIdFormatItem),
+            XX(N, ThreadNameFormatItem),
 #undef XX
         };
     for (auto& i : vec) {

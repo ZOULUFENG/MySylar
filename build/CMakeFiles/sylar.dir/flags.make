@@ -16,3 +16,5 @@ CXX_INCLUDES = -I/home/gl/workspace/sylar/. -I/apps/sylar/include
 
 # Custom defines: CMakeFiles/sylar.dir/sylar/thread.cc.o_DEFINES = __FILE__="sylar/thread.cc"
 
+# Custom defines: CMakeFiles/sylar.dir/sylar/fiber.cc.o_DEFINES = __FILE__="sylar/fiber.cc"
+

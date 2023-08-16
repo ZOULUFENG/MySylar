@@ -1,0 +1,73 @@
+以下是使用 PlantUML 语言编写的该代码段的类图：
+
+```puml
+@startuml
+
+namespace sylar {
+    class Semaphore {
+        +Semaphore(count: uint32_t = 0)
+        +wait(): void
+        +notify(): void
+    }
+
+    class Mutex {
+        +Mutex()
+        +lock(): void
+        +unlock(): void
+    }
+
+    class NullMutex {
+        +NullMutex()
+        +lock(): void
+        +unlock(): void
+    }
+
+    class Spinlock {
+        +Spinlock()
+        +lock(): void
+        +unlock(): void
+    }
+
+    class CASLock {
+        +CASLock()
+        +lock(): void
+        +unlock(): void
+    }
+
+    class RWMutex {
+        +RWMutex()
+        +rdlock(): void
+        +wrlock(): void
+        +unlock(): void
+    }
+
+    class NullRWMutex {
+        +NullRWMutex()
+        +rdlock(): void
+        +wrlock(): void
+        +unlock(): void
+    }
+
+    class Thread {
+        +Thread(cb: function<void()>, name: const std::string& = "")
+        +getId(): pid_t
+        +getName(): const std::string&
+        +join(): void
+        +GetThis(): Thread*
+        +GetName(): const std::string&
+        +SetName(name: const std::string&): void
+    }
+
+    Semaphore --|> Mutex
+    Semaphore --|> NullMutex
+    Thread --|> Semaphore
+    Thread --|> Mutex
+    Thread --|> NullMutex
+    Thread --|> NullRWMutex
+    Thread --|> RWMutex
+}
+
+@enduml
+```
+
+这个类图展示了命名空间 `sylar` 中的各个类及它们之间的关系。箭头表示继承或关联关系。其中，`Thread` 类与 `Semaphore`、`Mutex`、`NullMutex`、`NullRWMutex` 和 `RWMutex` 之间存在关联关系，表示 `Thread` 类使用了这些类。

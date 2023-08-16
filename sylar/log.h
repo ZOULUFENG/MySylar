@@ -21,7 +21,7 @@
     sylar::LogEventWrap(                                                \
         sylar::LogEvent::ptr(new sylar::LogEvent(                       \
             logger, level, __FILE__, __LINE__, 0, sylar::GetThreadId(), \
-            sylar::GetFiberId(), time(0))))                             \
+            sylar::GetFiberId(), time(0), sylar::Thread::GetName())))   \
         .getSS()
 
 #define SYLAR_LOG_DEBUG(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::DEBUG)
@@ -35,7 +35,7 @@
     sylar::LogEventWrap(                                                \
         sylar::LogEvent::ptr(new sylar::LogEvent(                       \
             logger, level, __FILE__, __LINE__, 0, sylar::GetThreadId(), \
-            sylar::GetFiberId(), time(0))))                             \
+            sylar::GetFiberId(), time(0), sylar::Thread::GetName())))   \
         .getEvent()                                                     \
         ->format(fmt, __VA_ARGS__)
 
@@ -79,7 +79,7 @@ public:
     typedef std::shared_ptr<LogEvent> ptr;
     LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level,
         const char* file, int32_t m_line, uint32_t elapse,
-        uint32_t thread_id, uint32_t fiber_id, uint64_t time);
+        uint32_t thread_id, uint32_t fiber_id, uint64_t time, const std::string& thread_name);
 
     const char* getFile() const { return m_file; }
     int32_t getLine() const { return m_line; }
@@ -87,6 +87,7 @@ public:
     uint32_t getFiberId() const { return m_fiberId; }
     uint32_t getThreadID() const { return m_threadId; }
     uint64_t getTime() const { return m_time; }
+    const std::string& getThreadName() const { return m_threadName; }
     std::string getContent() const { return m_ss.str(); }
     std::shared_ptr<Logger> getLogger() const { return m_logger; }
     std::stringstream& getSS() { return m_ss; }
@@ -101,9 +102,11 @@ private:
     uint32_t m_elapse = 0; // 程序启动到现在的毫秒数
     uint32_t m_fiberId = 0;
     uint64_t m_time = 0;
-    std::shared_ptr<Logger> m_logger;
     std::stringstream m_ss;
+
+    std::shared_ptr<Logger> m_logger;
     LogLevel::Level m_level;
+    std::string m_threadName;
 };
 
 class LogEventWrap {

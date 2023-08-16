@@ -8,7 +8,7 @@
             "name": "g++ build and debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/test_config",
+            "program": "${workspaceFolder}/bin/test_fiber",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

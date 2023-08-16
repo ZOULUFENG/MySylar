@@ -51,7 +51,11 @@ thread
 -
 
 /home/gl/workspace/sylar/sylar/util.h
+string
+-
 unistd.h
+-
+vector
 -
 
 /home/gl/workspace/sylar/tests/test.cc
