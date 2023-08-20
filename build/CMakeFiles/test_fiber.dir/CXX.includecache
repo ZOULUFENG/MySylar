@@ -78,6 +78,18 @@ assert.h
 string.h
 -
 
+../sylar/scheduler.h
+fiber.h
+../sylar/fiber.h
+thread.h
+../sylar/thread.h
+list
+-
+memory
+-
+vector
+-
+
 ../sylar/singleton.h
 
 ../sylar/sylar.h
@@ -89,6 +101,8 @@ log.h
 ../sylar/log.h
 macro.h
 ../sylar/macro.h
+scheduler.h
+../sylar/scheduler.h
 singleton.h
 ../sylar/singleton.h
 thread.h

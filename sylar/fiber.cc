@@ -2,6 +2,7 @@
 #include "config.h"
 #include "log.h"
 #include "macro.h"
+#include "scheduler.h"
 #include <atomic>
 
 namespace sylar {
@@ -42,7 +43,7 @@ Fiber::Fiber()
     SYLAR_LOG_DEBUG(g_logger) << "Fiber::Fiber() ";
 }
 
-Fiber::Fiber(std::function<void()> cb, size_t stacksize)
+Fiber::Fiber(std::function<void()> cb, size_t stacksize, bool use_caller)
     : m_id(++s_fiber_id)
     , m_cb(cb)
 {
@@ -57,7 +58,12 @@ Fiber::Fiber(std::function<void()> cb, size_t stacksize)
     m_ctx.uc_stack.ss_sp = m_stack;
     m_ctx.uc_stack.ss_size = m_stacksize;
 
-    makecontext(&m_ctx, &Fiber::MainFunc, 0);
+    if (!use_caller) {
+        makecontext(&m_ctx, &Fiber::MainFunc, 0);
+    } else {
+        makecontext(&m_ctx, &Fiber::CallerMainFunc, 0);
+    }
+
     SYLAR_LOG_DEBUG(g_logger) << "Fiber::Fiber() id=" << m_id;
 }
 
@@ -97,21 +103,40 @@ void Fiber::reset(std::function<void()> cb)
     m_state = INIT;
 }
 
+void Fiber::call()
+{
+    SetThis(this);
+    // SYLAR_ASSERT(m_state != EXEC);
+    SYLAR_LOG_DEBUG(g_logger) << "call_fiber_id=" << getId();
+    m_state = EXEC;
+    if (swapcontext(&t_threadFiber->m_ctx, &m_ctx)) {
+        SYLAR_ASSERT2(false, "call swapcontext");
+    }
+}
+
+void Fiber::back()
+{
+    SetThis(t_threadFiber.get());
+    if (swapcontext(&m_ctx, &t_threadFiber->m_ctx)) {
+        SYLAR_ASSERT2(false, "swapcontext");
+    }
+}
+
 void Fiber::swapIn()
 {
     SetThis(this);
     SYLAR_ASSERT(m_state != EXEC);
     m_state = EXEC;
     // swapcontext(&old_ctx, &new_ctx)
-    if (swapcontext(&t_threadFiber->m_ctx, &m_ctx)) {
+    if (swapcontext(&Scheduler::GetMainFiber()->m_ctx, &m_ctx)) {
         SYLAR_ASSERT2(false, "swapcontext");
     }
 }
 
 void Fiber::swapOut()
 {
-    SetThis(t_threadFiber.get());
-    if (swapcontext(&m_ctx, &t_threadFiber->m_ctx)) {
+    SetThis(Scheduler::GetMainFiber());
+    if (swapcontext(&m_ctx, &Scheduler::GetMainFiber()->m_ctx)) {
         SYLAR_ASSERT2(false, "swapcontext");
     }
 }
@@ -169,10 +194,14 @@ void Fiber::MainFunc()
         cur->m_state = TERM;
     } catch (const std::exception& ex) {
         cur->m_state = EXCEPT;
-        SYLAR_LOG_ERROR(g_logger) << "Fiber Except: " << ex.what();
+        SYLAR_LOG_ERROR(g_logger) << "Fiber Except: " << ex.what() << std::endl
+                                  << "fiber_id=" << cur->getId()
+                                  << sylar::BacktraceToString(64);
     } catch (...) {
         cur->m_state = EXCEPT;
-        SYLAR_LOG_ERROR(g_logger) << "Fiber Except: ";
+        SYLAR_LOG_ERROR(g_logger) << "Fiber Except: " << std::endl
+                                  << "fiber_id=" << cur->getId()
+                                  << sylar::BacktraceToString(64);
     }
     // Use this method to perfectly solve the remaining problems below
     auto raw_ptr = cur.get();
@@ -181,7 +210,37 @@ void Fiber::MainFunc()
     // The destructor cannot deconstruct this object
     raw_ptr->swapOut();
 
-    SYLAR_ASSERT2(false, "never reach!");
+    SYLAR_ASSERT2(false, "never reach! fiber_id=" + std::to_string(raw_ptr->getId()));
+}
+
+void Fiber::CallerMainFunc()
+{
+    Fiber::ptr cur = GetThis();
+    // Is it still possible that it doesn't exist?
+    SYLAR_ASSERT(cur);
+    try {
+        cur->m_cb();
+        cur->m_cb = nullptr;
+        cur->m_state = TERM;
+    } catch (const std::exception& ex) {
+        cur->m_state = EXCEPT;
+        SYLAR_LOG_ERROR(g_logger) << "Fiber Except: " << ex.what() << std::endl
+                                  << "fiber_id=" << cur->getId()
+                                  << sylar::BacktraceToString(64);
+    } catch (...) {
+        cur->m_state = EXCEPT;
+        SYLAR_LOG_ERROR(g_logger) << "Fiber Except: " << std::endl
+                                  << "fiber_id=" << cur->getId()
+                                  << sylar::BacktraceToString(64);
+    }
+    // Use this method to perfectly solve the remaining problems below
+    auto raw_ptr = cur.get();
+    cur.reset();
+    // Perfect solution to the problem of not being able to return main end.But there is still a problem:
+    // The destructor cannot deconstruct this object
+    raw_ptr->back();
+
+    SYLAR_ASSERT2(false, "never reach! fiber_id=" + std::to_string(raw_ptr->getId()));
 }
 
 } // namespace sylar

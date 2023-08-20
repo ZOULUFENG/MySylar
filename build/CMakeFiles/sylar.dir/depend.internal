@@ -76,6 +76,7 @@ CMakeFiles/sylar.dir/sylar/fiber.cc.o
  /home/gl/workspace/sylar/sylar/fiber.h
  /home/gl/workspace/sylar/sylar/log.h
  /home/gl/workspace/sylar/sylar/macro.h
+ /home/gl/workspace/sylar/sylar/scheduler.h
  /home/gl/workspace/sylar/sylar/singleton.h
  /home/gl/workspace/sylar/sylar/thread.h
  /home/gl/workspace/sylar/sylar/util.h
@@ -117,6 +118,15 @@ CMakeFiles/sylar.dir/sylar/log.cc.o
  /home/gl/workspace/sylar/sylar/singleton.h
  /home/gl/workspace/sylar/sylar/thread.h
  /home/gl/workspace/sylar/sylar/util.h
+CMakeFiles/sylar.dir/sylar/scheduler.cc.o
+ /home/gl/workspace/sylar/sylar/fiber.h
+ /home/gl/workspace/sylar/sylar/log.h
+ /home/gl/workspace/sylar/sylar/macro.h
+ /home/gl/workspace/sylar/sylar/scheduler.cc
+ /home/gl/workspace/sylar/sylar/scheduler.h
+ /home/gl/workspace/sylar/sylar/singleton.h
+ /home/gl/workspace/sylar/sylar/thread.h
+ /home/gl/workspace/sylar/sylar/util.h
 CMakeFiles/sylar.dir/sylar/thread.cc.o
  /apps/sylar/include/yaml-cpp/binary.h
  /apps/sylar/include/yaml-cpp/dll.h
@@ -153,6 +163,7 @@ CMakeFiles/sylar.dir/sylar/thread.cc.o
  /home/gl/workspace/sylar/sylar/fiber.h
  /home/gl/workspace/sylar/sylar/log.h
  /home/gl/workspace/sylar/sylar/macro.h
+ /home/gl/workspace/sylar/sylar/scheduler.h
  /home/gl/workspace/sylar/sylar/singleton.h
  /home/gl/workspace/sylar/sylar/sylar.h
  /home/gl/workspace/sylar/sylar/thread.cc

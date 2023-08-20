@@ -37,6 +37,7 @@ CMakeFiles/test_thread.dir/tests/test_thread.cc.o
  /home/gl/workspace/sylar/sylar/fiber.h
  /home/gl/workspace/sylar/sylar/log.h
  /home/gl/workspace/sylar/sylar/macro.h
+ /home/gl/workspace/sylar/sylar/scheduler.h
  /home/gl/workspace/sylar/sylar/singleton.h
  /home/gl/workspace/sylar/sylar/sylar.h
  /home/gl/workspace/sylar/sylar/thread.h

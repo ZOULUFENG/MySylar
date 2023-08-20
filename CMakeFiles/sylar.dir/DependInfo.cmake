@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/gl/workspace/sylar/sylar/config.cc" "/home/gl/workspace/sylar/CMakeFiles/sylar.dir/sylar/config.cc.o"
   "/home/gl/workspace/sylar/sylar/fiber.cc" "/home/gl/workspace/sylar/CMakeFiles/sylar.dir/sylar/fiber.cc.o"
   "/home/gl/workspace/sylar/sylar/log.cc" "/home/gl/workspace/sylar/CMakeFiles/sylar.dir/sylar/log.cc.o"
+  "/home/gl/workspace/sylar/sylar/scheduler.cc" "/home/gl/workspace/sylar/CMakeFiles/sylar.dir/sylar/scheduler.cc.o"
   "/home/gl/workspace/sylar/sylar/thread.cc" "/home/gl/workspace/sylar/CMakeFiles/sylar.dir/sylar/thread.cc.o"
   "/home/gl/workspace/sylar/sylar/util.cc" "/home/gl/workspace/sylar/CMakeFiles/sylar.dir/sylar/util.cc.o"
   )
