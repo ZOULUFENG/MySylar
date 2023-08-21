@@ -28,6 +28,7 @@ void test_fiber()
         SYLAR_LOG_INFO(g_logger) << "main after swapIN";
         fiber->swapIn();
         SYLAR_LOG_INFO(g_logger) << "main end";
+        fiber->swapIn();
     }
     SYLAR_LOG_INFO(g_logger) << "main end 2";
 }
