@@ -8,7 +8,7 @@
             "name": "g++ build and debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/test_scheduler",
+            "program": "${workspaceFolder}/bin/test_iomanager",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

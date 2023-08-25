@@ -4,6 +4,7 @@
 #include "macro.h"
 #include "scheduler.h"
 #include <atomic>
+#include <iostream>
 
 namespace sylar {
 // Why is here the type of g_logger is static
@@ -204,11 +205,15 @@ void Fiber::MainFunc()
                                   << sylar::BacktraceToString(64);
     }
     // Use this method to perfectly solve the remaining problems below
+    // std::cout << "111" << std::endl;
     auto raw_ptr = cur.get();
+    // std::cout << "222" << std::endl;
     cur.reset();
     // Perfect solution to the problem of not being able to return main end.But there is still a problem:
     // The destructor cannot deconstruct this object
+    // std::cout << "333" << std::endl;
     raw_ptr->swapOut();
+    // std::cout << "444" << std::endl;
 
     SYLAR_ASSERT2(false, "never reach! fiber_id=" + std::to_string(raw_ptr->getId()));
 }
