@@ -1,0 +1,25 @@
+@startuml
+class sylar {
+    +is_hook_enable()
+    +set_hook_enable(bool)
+}
+class hook_functions {
+    +do_io()
+    +sleep(), usleep(), nanosleep()
+    +socket(), connect(), accept()
+    +read(), readv(), recv(), recvfrom(), recvmsg()
+    +write(), writev(), send(), sendto(), sendmsg()
+    +close()
+    +fcntl(), ioctl(), getsockopt(), setsockopt()
+}
+class original_syscalls {
+    +sleep(), usleep(), nanosleep()
+    +socket(), connect(), accept()
+    +read(), readv(), recv(), recvfrom(), recvmsg()
+    +write(), writev(), send(), sendto(), sendmsg()
+    +close()
+    +fcntl(), ioctl(), getsockopt(), setsockopt()
+}
+sylar - hook_functions : Uses
+hook_functions - original_syscalls : Calls
+@enduml

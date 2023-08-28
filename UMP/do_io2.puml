@@ -1,0 +1,52 @@
+@startuml
+
+class Scheduler {
+    +addTask(task: Task): void
+    +schedule(fiber: Fiber::ptr, thread_id: int = -1): void
+    +tickle(): void
+    +idle(): void
+    +stopping(): bool
+}
+
+class TimerManager {
+    +addTimer(timer: Timer::ptr): void
+    +addConditionTimer(timer: Timer::ptr, mutex: MutexType): void
+    +getNextTimer(): Timer::ptr
+}
+
+namespace sylar {
+    class Fiber {
+        // Fiber class details...
+    }
+
+    class RWMutex {
+        // RWMutex class details...
+    }
+
+    class IOManager {
+        // IOManager class details...
+    }
+
+    enum IOManager::Event {
+        NONE = 0x0,
+        READ = 0x1,
+        WRITE = 0x4
+    }
+
+    class IOManager::FdContext {
+        // FdContext class details...
+    }
+
+    class IOManager::FdContext::EventContext {
+        // EventContext class details...
+    }
+}
+
+Scheduler <|-- sylar.IOManager
+TimerManager <|-- sylar.IOManager
+IOManager -|> Scheduler
+IOManager -|> TimerManager
+IOManager "1" *-- "*" FdContext : has
+IOManager "1" *-- "1..*" Fiber : has
+
+@enduml

@@ -1,0 +1,59 @@
+@startuml
+start
+
+if (钩子未启用?) then (是)
+  :直接调用原始系统调用函数;
+  stop
+else (否)
+  :获取文件描述符上下文;
+endif
+
+if (上下文不存在?) then (是)
+  :直接调用原始系统调用函数;
+  stop
+else (否)
+  if (文件描述符已关闭?) then (是)
+    :设置错误码为EBADF;
+    :返回-1;
+    stop
+  else (否)
+    if (非阻塞或非套接字?) then (是)
+      :直接调用原始系统调用函数;
+      stop
+    else (否)
+      :获取超时时间;
+      :定义定时器信息;
+      repeat
+        :调用原始系统调用函数;
+        if (出现中断错误?) then (是)
+          :继续调用;
+        endif
+      repeat while (返回值为-1且错误码为EINTR?)
+      if (出现非阻塞错误?) then (是)
+        :设置超时定时器;
+        :添加事件;
+        if (添加事件失败?) then (是)
+          :记录错误日志;
+          :返回-1;
+          stop
+        else (否)
+          :切换协程状态为挂起;
+          if (定时器存在?) then (是)
+            :取消定时器;
+          endif
+          if (定时器被取消?) then (是)
+            :设置错误码为定时器取消的错误码;
+            :返回-1;
+            stop
+          else (否)
+            :重新尝试调用系统调用函数;
+          endif
+        endif
+      else (否)
+        :返回结果;
+      endif
+    endif
+  endif
+endif
+
+@enduml

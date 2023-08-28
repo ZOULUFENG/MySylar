@@ -1,0 +1,30 @@
+@startuml
+class FdCtx {
+    +isClose()
+    +isSocket()
+    +getUserNonblock()
+    +getTimeout(timeout_so)
+    +setUserNonblock(bool)
+    +setTimeout(timeout_so, uint64_t)
+}
+class IOManager {
+    +addEvent(fd, event)
+    +cancelEvent(fd, event)
+    +addConditionTimer(timeout, callback, weak_ptr)
+}
+class Timer {
+    +cancel()
+}
+class Fiber {
+    +YieldToHold()
+}
+class FdMgr {
+    +GetInstance()
+    +get(fd, create)
+    +del(fd)
+}
+FdCtx --* IOManager
+IOManager *-- Timer
+IOManager *-- Fiber
+FdCtx --* FdMgr
+@enduml
